@@ -16,7 +16,7 @@ import com.lxf.stock.backtest.daydata.frame.IStockPolicy;
 public class StockPolicyFall implements IStockPolicy {
 	private int nDayFall = 7; // 连续跌几天
 	private int minSize = 15; // 最少交易天数
-	private float fundRate = 0.0f;// minSize天内 流入流出资金比
+	private float fundRate = 0.0f;// minSize天内 流入流出资金比 ,这个好像没什么用
 
 	private int maxHoldDay = 3; // 最多持有天数
 	private float riseRate = 0.04f; // 预期收益率
