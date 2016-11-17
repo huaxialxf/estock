@@ -85,8 +85,7 @@ public class DataProviderTushare implements IDataProvider {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(stockFile));
-			String line = reader.readLine();
-			line = reader.readLine();
+			String line = reader.readLine(); //忽略第一行
 			while ((line = reader.readLine()) != null) {
 				StockDayInfo dayInfo = parseStockDayInfo(line);
 				stockInfo.getListData().add(0,dayInfo);

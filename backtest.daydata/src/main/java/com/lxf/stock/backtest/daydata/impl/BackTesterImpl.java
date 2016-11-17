@@ -67,8 +67,8 @@ public class BackTesterImpl implements IBackTester {
 						listRecord.add(investRecord);
 					}
 				}
-				reportCreater.createReport(listRecord);
 			}
+			reportCreater.createReport(listRecord);
 
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);

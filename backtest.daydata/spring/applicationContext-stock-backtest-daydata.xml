@@ -20,7 +20,10 @@
 			<value>data/test/2016-11-13</value>
 		</property>
 	</bean>
+ 	
 
+			<!-- <value>D:/LxfWork/estock/all_day_info/2016-11-13</value> -->
+			<!-- <value>data/test/2016-11-13</value> -->
 	<bean id="StockPolicyFall" class="com.lxf.stock.backtest.daydata.impl.StockPolicyFall">
 	</bean>
 	<bean id="RreportCreaterImpl" class="com.lxf.stock.backtest.daydata.impl.RreportCreaterImpl">

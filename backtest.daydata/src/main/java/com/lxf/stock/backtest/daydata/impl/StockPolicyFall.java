@@ -7,15 +7,25 @@ import com.lxf.stock.backtest.daydata.domain.StockDayInfo;
 import com.lxf.stock.backtest.daydata.domain.StockInfo;
 import com.lxf.stock.backtest.daydata.frame.IStockPolicy;
 
+/**
+ * 联系下跌的侧率
+ * 
+ * @author LuXinFeng
+ *
+ */
 public class StockPolicyFall implements IStockPolicy {
 	private int nDayFall = 7; // 连续跌几天
 	private int minSize = 15; // 最少交易天数
-	private float fundRate = 1.0f;// minSize天内 流入流出资金比
+	private float fundRate = 0.0f;// minSize天内 流入流出资金比
 
 	private int maxHoldDay = 3; // 最多持有天数
-	private float riseRate = 0.03f; // 预期收益率
-	private float fullRate = 0.02f; // 预期收益率
+	private float riseRate = 0.04f; // 预期收益率
+	private float fallRate = 0.02f; // 止损率
 
+	/**
+	 * 连续跌7天，买入
+	 * 
+	 */
 	public boolean buy(String stockCode, String curDay, List<StockDayInfo> historyDayInfoList) {
 		if (historyDayInfoList.size() <= minSize) {// 交易天数太少，可能是新股
 			return false;
@@ -29,7 +39,7 @@ public class StockPolicyFall implements IStockPolicy {
 		for (int i = 0; i < historyDayInfoList.size(); i++) {
 			int index = historyDayInfoList.size() - i - 1;
 			StockDayInfo curDayInfo = historyDayInfoList.get(index);
-			if (curDayInfo.getOpenPrice() < curDayInfo.getClosePrice()) { // 定义为跌
+			if (curDayInfo.getOpenPrice() > curDayInfo.getClosePrice()) { // 定义为跌
 				nFall++;
 			} else {
 				break;
@@ -44,7 +54,7 @@ public class StockPolicyFall implements IStockPolicy {
 		for (int i = 0; i < minSize; i++) {
 			int index = historyDayInfoList.size() - i - 1;
 			StockDayInfo curDayInfo = historyDayInfoList.get(index);
-			if (curDayInfo.getOpenPrice() < curDayInfo.getClosePrice()) { // 定义为跌
+			if (curDayInfo.getOpenPrice() > curDayInfo.getClosePrice()) { // 定义为跌
 				fFallFund = fFallFund
 						+ (curDayInfo.getClosePrice() - curDayInfo.getOpenPrice()) * curDayInfo.getVolume();
 			} else {
@@ -60,23 +70,26 @@ public class StockPolicyFall implements IStockPolicy {
 	}
 
 	public void sale(String stockCode, InvestRecord investRecord, StockInfo info) {
+		if("000662".equals(stockCode) && "2014-05-20".equals(investRecord.getInDate())){
+			System.out.println(">>>");
+		}
 		int index = info.getListData().indexOf(investRecord.getDayInfo());
 		for (int i = 0; i < maxHoldDay; i++) {
-			if (index - i - 1 < 0) {
+			if (index + i + 1 >= info.getListData().size()) {
 				return;// 投资未结束
 			}
 			StockDayInfo dayInfo = info.getListData().get(index + i + 1);
 			float inPrice = investRecord.getInPrice();
 
 			// 假定先出现最低价格
-			if ((inPrice - dayInfo.getLowPrice()) / inPrice >= fullRate) { // 止损收益
+			if ((inPrice - dayInfo.getLowPrice()) / inPrice >= fallRate) { // 止损收益
 				investRecord.setHoldDays(i + 1);
 				investRecord.setOutDate(dayInfo.getDate());
-				investRecord.setOutPrice(inPrice * (1 - fullRate));
+				investRecord.setOutPrice(inPrice * (1 - fallRate));
 				return;
 			}
 
-			if ((dayInfo.getHightPrice() - dayInfo.getHightPrice()) / inPrice >= riseRate) { // 达到预期收益
+			if ((dayInfo.getHightPrice() - inPrice) / inPrice >= riseRate) { // 达到预期收益
 				investRecord.setHoldDays(i + 1);
 				investRecord.setOutDate(dayInfo.getDate());
 				investRecord.setOutPrice(inPrice * (1 + riseRate));
