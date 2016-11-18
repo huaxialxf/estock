@@ -60,7 +60,7 @@ public class BackTesterImpl implements IBackTester {
 									throw new RuntimeException("策略不合理");
 								}
 							} catch (ParseException e) {
-								logger.error("stockCode = {} , inDate = {} , outDate = {}", stockCode,
+								logger.error(" 解析错误 stockCode = {} , inDate = {} , outDate = {}", stockCode,
 										investRecord.getInDate(), investRecord.getOutDate());
 							}
 						}

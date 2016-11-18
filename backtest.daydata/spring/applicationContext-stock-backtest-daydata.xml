@@ -17,20 +17,34 @@
 
 	<bean id="DataProviderTushare" class="com.lxf.stock.backtest.daydata.impl.DataProviderTushare">
 		<property name="fileStockInfo">
-			<value>data/test/2016-11-13</value>
+			<value>D:/LxfWork/estock/all_day_info/2016-11-13</value>
 		</property>
 	</bean>
- 	
 
-			<!-- <value>D:/LxfWork/estock/all_day_info/2016-11-13</value> -->
-			<!-- <value>data/test/2016-11-13</value> -->
+	<bean id="DataProviderXdt" class="com.lxf.stock.backtest.daydata.impl.DataProviderXdt">
+		<property name="fileStockInfo">
+			<value>F:/stock_study/tdx_data/export</value>
+		</property>
+	</bean>
+
+
+	<!-- <value>D:/LxfWork/estock/all_day_info/2016-11-13</value> -->
+	<!-- <value>data/test/2016-11-13</value> -->
 	<bean id="StockPolicyFall" class="com.lxf.stock.backtest.daydata.impl.StockPolicyFall">
 	</bean>
+	<bean id="StockPolicyJbp" class="com.lxf.stock.backtest.daydata.impl.StockPolicyJbp">
+	</bean>
+
+
+
 	<bean id="RreportCreaterImpl" class="com.lxf.stock.backtest.daydata.impl.RreportCreaterImpl">
 	</bean>
 	<bean id="BackTester" class="com.lxf.stock.backtest.daydata.impl.BackTesterImpl">
-		<property name="dataProvider" ref="DataProviderTushare" />
+		<!-- <property name="dataProvider" ref="DataProviderTushare" /> -->
+		<property name="dataProvider" ref="DataProviderXdt" />
+
 		<property name="iStockPolicy" ref="StockPolicyFall" />
+		<!-- <property name="iStockPolicy" ref="StockPolicyJbp" /> -->
 		<property name="reportCreater" ref="RreportCreaterImpl" />
 	</bean>
 

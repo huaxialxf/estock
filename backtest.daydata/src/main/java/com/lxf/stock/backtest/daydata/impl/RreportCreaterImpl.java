@@ -1,7 +1,5 @@
 package com.lxf.stock.backtest.daydata.impl;
 
-import java.io.PrintStream;
-import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -38,7 +36,7 @@ public class RreportCreaterImpl implements IReportCreater {
 	private Map<String, List<InvestRecord>> getListRecordMap(List<InvestRecord> listRecord) {
 		Map<String, List<InvestRecord>> map = new LinkedHashMap<String, List<InvestRecord>>();
 		for (InvestRecord investRecord : listRecord) {
-			String key = investRecord.getInDate().substring(0, "2010-01".length());
+			String key = investRecord.getInDate().substring(0, "2010".length());
 			List<InvestRecord> list = map.get(key);
 			if (list == null) {
 				list = new ArrayList<InvestRecord>();
@@ -50,6 +48,8 @@ public class RreportCreaterImpl implements IReportCreater {
 	}
 
 	public void createReport(List<InvestRecord> listRecord) {
+		
+		
 		boolean isRise = _createReport(listRecord);
 		if (!isRise) {
 			System.out.println("报表 :所有 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>亏损\n");
@@ -75,6 +75,12 @@ public class RreportCreaterImpl implements IReportCreater {
 			}
 		}
 		System.out.println("亏损次数:" + nFall + "              周期亏损率:" + 100.0f * nFall / map.size() + "%");
+		
+		for (InvestRecord investRecord : listRecord) {
+			if(investRecord.getOutPrice()<investRecord.getInPrice() && investRecord.getInDate().startsWith("2016")){
+				System.out.println(investRecord.getStockCode() +" == " +investRecord.getInDate() +"=="+investRecord.getOutDate());
+			}
+		}
 	}
 
 }
